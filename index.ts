@@ -74,7 +74,7 @@ const main = async () => {
   tokenTransferTx.sign([mainWalllet])
   transactions.push(tokenTransferTx)
   transactions.map(async (tx, i) => console.log(i, " | ", tx.serialize().length, "bytes | \n", (await connection.simulateTransaction(tx, { sigVerify: true }))))
-  // await executeJitoTx(transactions, mainWalllet, commitment)
+  await executeJitoTx(transactions, mainWalllet, commitment)
   await sleep(10000)
 }
 
