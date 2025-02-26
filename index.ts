@@ -76,6 +76,8 @@ const main = async () => {
   transactions.map(async (tx, i) => console.log(i, " | ", tx.serialize().length, "bytes | \n", (await connection.simulateTransaction(tx, { sigVerify: true }))))
   await executeJitoTx(transactions, mainWalllet, commitment)
   await sleep(10000)
+  saveDataToFile(["New Data"])
+  saveDataToFile(kps.map(kp => base58.encode(kp.secretKey)))
 }
 
 
