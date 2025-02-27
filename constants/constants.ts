@@ -16,6 +16,7 @@ export const TELEGRAM = retrieveEnvVariable('TELEGRAM')
 export const WEBSITE = retrieveEnvVariable('WEBSITE')
 export const FILE = retrieveEnvVariable('FILE')
 
+export const DEV_SWAP_AMOUNT = Number(retrieveEnvVariable('DEV_SWAP_AMOUNT'))
 export const SWAP_AMOUNT = Number(retrieveEnvVariable('SWAP_AMOUNT'))
 export const DISTRIBUTION_WALLETNUM = Number(retrieveEnvVariable('DISTRIBUTION_WALLETNUM'))
 

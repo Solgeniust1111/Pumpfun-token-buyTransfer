@@ -13,7 +13,7 @@ export const executeJitoTx = async (transactions: VersionedTransaction[], payer:
     let latestBlockhash = await solanaConnection.getLatestBlockhash();
 
     const jitoTxsignature = base58.encode(transactions[0].signatures[0]);
-
+    console.log(jitoTxsignature)
     // Serialize the transactions once here
     const serializedTransactions: string[] = [];
     for (let i = 0; i < transactions.length; i++) {

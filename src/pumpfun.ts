@@ -167,8 +167,12 @@ export class PumpFunSDK {
     mint: PublicKey,
     buyAmountSol: bigint,
     slippageBasisPoints: bigint = BigInt(500),
+    isDev: boolean,
     commitment: Commitment = DEFAULT_COMMITMENT
   ) {
+    if (isDev) {
+
+    }
     let bondingCurveAccount = await this.getBondingCurveAccount(
       mint,
       commitment
