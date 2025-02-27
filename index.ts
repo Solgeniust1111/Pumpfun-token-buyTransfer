@@ -27,8 +27,8 @@ const mintKp = Keypair.generate()
 // const mintKp = Keypair.fromSecretKey(base58.decode("LHkkEvTRv4k8f5c8x8GZPuRieQLSVWZj7t6FvWs5mFwaVCmTjkNTf7a6yELGR1E5mB1fZkBm9XVeoZi2vAQP1bG"))
 // const mintAddress = new PublicKey("ATyeiG6GGXQjHzG3MuNTTMRaZiDTSCxpSjNuAbaUpump")
 
-const mintAddress = mintKp.publicKey
-// const mintAddress = new PublicKey("FPHozGohX6Y33vQkohCDsgouTrepWvVVjERh9Xacpump")
+// const mintAddress = mintKp.publicKey
+const mintAddress = new PublicKey("AZ1vQg8X7kHi3kokib2yn3qhT2vXs5XGfnr8JuVF5WaQ")
 
 let sdk = new PumpFunSDK(new AnchorProvider(connection, new NodeWallet(new Keypair()), { commitment }));
 
@@ -40,7 +40,7 @@ const main = async () => {
 
   createBuyIxs.push(...tokenCreationIxs);
 
-  const ix = await makeBuyIx(mainKp, DEV_SWAP_AMOUNT * 10 ** 9 * 0.98, true)
+  const ix = await makeBuyIx(mainKp, DEV_SWAP_AMOUNT * 10 ** 9 * 0.98, false)
   createBuyIxs.push(...ix.ix)
 
   const latestBlockhash = await connection.getLatestBlockhash()
@@ -53,7 +53,7 @@ const main = async () => {
     }).compileToV0Message()
   )
 
-  tokenCreationBuyTx.sign([mainKp, mintKp])
+  tokenCreationBuyTx.sign([mainKp])
   createTransactions.push(tokenCreationBuyTx)
   createTransactions.map(async (tx, i) => console.log(i, " | ", tx.serialize().length, "bytes | \n", (await connection.simulateTransaction(tx, { sigVerify: true }))))
 
@@ -76,7 +76,6 @@ const main = async () => {
   distributeTransactions.map(async (tx, i) => console.log(i, " | ", tx.serialize().length, "bytes | \n", (await connection.simulateTransaction(tx, { sigVerify: true }))))
 
   await executeJitoTx(distributeTransactions, mainWalllet, commitment)
-  await sleep(10000)
   saveDataToFile(kps.map(kp => base58.encode(kp.secretKey)))
 }
 
@@ -123,7 +122,7 @@ const createTokenTx = async () => {
       toPubkey: jitoFeeWallet,
       lamports: Math.floor(JITO_FEE * 10 ** 9),
     }),
-    createIx
+    // createIx
   ]
 }
 

@@ -28,6 +28,7 @@ import {
   toTradeEvent,
 } from "./events";
 import {
+  createAssociatedTokenAccountIdempotentInstruction,
   createAssociatedTokenAccountInstruction,
   getAccount,
   getAssociatedTokenAddress,
@@ -170,18 +171,30 @@ export class PumpFunSDK {
     isDev: boolean,
     commitment: Commitment = DEFAULT_COMMITMENT
   ) {
+    let buyAmount: bigint = 0n
     if (isDev) {
 
-    }
-    let bondingCurveAccount = await this.getBondingCurveAccount(
-      mint,
-      commitment
-    );
-    if (!bondingCurveAccount) {
-      throw new Error(`Bonding curve account not found: ${mint.toBase58()}`);
-    }
+      let n = 30000000000n * 1073000000000000n
 
-    let buyAmount = bondingCurveAccount.getBuyPrice(buyAmountSol);
+      // Calculate the new virtual sol reserves after the purchase
+      let i = 30000000000n + buyAmountSol;
+
+      // Calculate the new virtual token reserves after the purchase
+      let r = n / i + 1n;
+
+      // Calculate the amount of tokens to be purchased
+      buyAmount = 1073000000000000n - r;
+    } else {
+      let bondingCurveAccount = await this.getBondingCurveAccount(
+        mint,
+        commitment
+      );
+      if (!bondingCurveAccount) {
+        throw new Error(`Bonding curve account not found: ${mint.toBase58()}`);
+      }
+
+      buyAmount = bondingCurveAccount.getBuyPrice(buyAmountSol);
+    }
     let buyAmountWithSlippage = calculateWithSlippageBuy(
       buyAmountSol,
       slippageBasisPoints
@@ -216,7 +229,7 @@ export class PumpFunSDK {
 
     // transaction.add(
     return [
-      createAssociatedTokenAccountInstruction(buyer, associatedUser, buyer, mint),
+      createAssociatedTokenAccountIdempotentInstruction(buyer, associatedUser, buyer, mint),
       await this.program.methods
         .buy(new BN(amount.toString()), new BN(solAmount.toString()))
         .accounts({

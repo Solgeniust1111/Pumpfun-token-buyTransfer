@@ -47,21 +47,22 @@ export const executeJitoTx = async (transactions: VersionedTransaction[], payer:
 
     if (successfulResults.length > 0) {
       console.log("Waiting for response")
-      const confirmation = await solanaConnection.confirmTransaction(
-        {
-          signature: jitoTxsignature,
-          lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-          blockhash: latestBlockhash.blockhash,
-        },
-        commitment,
-      );
+      // const confirmation = await solanaConnection.confirmTransaction(
+      //   {
+      //     signature: jitoTxsignature,
+      //     lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+      //     blockhash: latestBlockhash.blockhash,
+      //   },
+      //   commitment,
+      // );
 
-      if (confirmation.value.err) {
-        console.log("Confirmtaion error")
-        return null
-      } else {
-        return jitoTxsignature;
-      }
+      // if (confirmation.value.err) {
+      //   console.log("Confirmtaion error")
+      //   return null
+      // } else {
+      //   return jitoTxsignature;
+      // }
+      return jitoTxsignature
     } else {
       console.log(`No successful responses received for jito`);
     }
