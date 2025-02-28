@@ -1,16 +1,14 @@
-import { VersionedTransaction, Keypair, SystemProgram, Transaction, Connection, ComputeBudgetProgram, TransactionInstruction, TransactionMessage, AddressLookupTableProgram, PublicKey, SYSVAR_RENT_PUBKEY, sendAndConfirmTransaction } from "@solana/web3.js"
-import { ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountIdempotentInstruction, createAssociatedTokenAccountInstruction, createCloseAccountInstruction, createTransferInstruction, getAssociatedTokenAddressSync, NATIVE_MINT, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { VersionedTransaction, Keypair, SystemProgram, Connection, TransactionInstruction, TransactionMessage, PublicKey } from "@solana/web3.js"
+import { createAssociatedTokenAccountInstruction, createTransferInstruction, getAssociatedTokenAddressSync } from "@solana/spl-token";
 import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
 import { AnchorProvider } from "@coral-xyz/anchor";
 import { openAsBlob } from "fs";
 import base58 from "bs58"
 
-import { DESCRIPTION, DEV_SWAP_AMOUNT, DISTRIBUTION_WALLETNUM, FILE, global_mint, JITO_FEE, PRIVATE_KEY, PUMP_PROGRAM, RPC_ENDPOINT, RPC_WEBSOCKET_ENDPOINT, SUB_PRIVATE_KEY, SWAP_AMOUNT, TELEGRAM, TOKEN_CREATE_ON, TOKEN_NAME, TOKEN_SHOW_NAME, TOKEN_SYMBOL, TWITTER, WEBSITE } from "./constants"
-import { readJson, saveDataToFile, sleep } from "./utils"
-import { createAndSendV0Tx, execute } from "./executor/legacy"
+import { DESCRIPTION, DEV_SWAP_AMOUNT, DISTRIBUTION_WALLETNUM, FILE, JITO_FEE, PRIVATE_KEY, RPC_ENDPOINT, RPC_WEBSOCKET_ENDPOINT, SUB_PRIVATE_KEY, SWAP_AMOUNT, TELEGRAM, TOKEN_CREATE_ON, TOKEN_NAME, TOKEN_SHOW_NAME, TOKEN_SYMBOL, TWITTER, WEBSITE } from "./constants"
+import { saveDataToFile } from "./utils"
 import { PumpFunSDK } from "./src/pumpfun";
 import { executeJitoTx } from "./executor/jito";
-import { displayStatus } from "./status"
 import { readFile } from "fs/promises";
 
 const commitment = "confirmed"
@@ -24,10 +22,6 @@ let kps: Keypair[] = []
 
 const mintKp = Keypair.generate()
 
-// const mintKp = Keypair.fromSecretKey(base58.decode("LHkkEvTRv4k8f5c8x8GZPuRieQLSVWZj7t6FvWs5mFwaVCmTjkNTf7a6yELGR1E5mB1fZkBm9XVeoZi2vAQP1bG"))
-// const mintAddress = new PublicKey("ATyeiG6GGXQjHzG3MuNTTMRaZiDTSCxpSjNuAbaUpump")
-
-// const mintAddress = mintKp.publicKey
 const mintAddress = new PublicKey("AZ1vQg8X7kHi3kokib2yn3qhT2vXs5XGfnr8JuVF5WaQ")
 
 let sdk = new PumpFunSDK(new AnchorProvider(connection, new NodeWallet(new Keypair()), { commitment }));
